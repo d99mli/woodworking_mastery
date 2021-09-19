@@ -13,6 +13,31 @@
     <title>Woodworking Mastery</title>
 </head>
 <body>
+    <header>
+        <!-- Top Navbar -->
+        <nav class="nav-extended text-shadow brown darken-3">
+            <div class="nav-wrapper">
+              <a href="{{ url_for('get_tasks') }}" class="brand-logo center">Woodworking Mastery</a>
+              <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="fas fa-bars"></i></a>
+              <ul class="right hide-on-med-and-down">
+                <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
+                <li><a href="#">Log Out</a></li>
+                <li><a href="#">Log In</a></li>
+                <li><a href="#">Register</a></li>
+                <li><a href="#">Profile</a></li>
+              </ul>
+            </div>
+          </nav>
+        <!-- REMEMBER to complete the functionality of a side nav that is fixed on larger screens -->
+        <!-- Mobile Side Navbar -->
+          <ul class="sidenav" id="mobile-demo">
+              <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
+              <li><a href="#">Log Out</a></li>
+              <li><a href="#">Log In</a></li>
+              <li><a href="#">Register</a></li>
+              <li><a href="#">Profile</a></li>
+          </ul>
+    </header>
 
     {% block content %}
     {% endblock %}
