@@ -20,7 +20,7 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_tasks")     # change get_tasks to more appropriate route name
 def get_tasks():    # change get_tasks to more appropiate name
-    tasks = mongo.db.tasks.find()       # tasks needs to change accordingly
+    tasks = list(mongo.db.tasks.find())       # tasks needs to change accordingly
     return render_template("tasks.html", tasks=tasks)        # tasks.html will perhaps be changed to index
 
 
