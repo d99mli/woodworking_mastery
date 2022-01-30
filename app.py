@@ -20,6 +20,21 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 
+# ---------------- Forms ----------------
+
+class SignupForm(Form):
+    name = StringField('Name', [validators.Length(min=2, max=50)])
+    username = StringField('Username', [validators.Length(min=4, max=20)])
+    email = StringField('Email', [validators.Length(min=6, max=50)])
+    password = PasswordField('Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords do not match')
+    ])
+    confirm_password = PasswordField('Confirm Password')
+
+# ---------------- End Forms ----------------
+
+
 # ---------------- Routes ----------------
 @app.route("/")
 @app.route("/home")
@@ -36,21 +51,18 @@ def articles():
 def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
-        return render_template('signup.html')
+        signup_user = {
+            'name': request.form.get('name').lower(),
+            'email': request.form.get('email').lower(),
+            'username': request.form.get('username').lower(),
+            'password': sha256_crypt.hash(request.form.get('password'))
+        }
+        # insert_one requires an dictionary to store info in mongoDB
+        mongo.db.users.insert_one(signup_user)
+
+        flash('You have Signed Up successfully! Please proceed to Login')
 
     return render_template('signup.html', form=form)
-
-
-# ---------------- Forms ----------------
-class SignupForm(Form):
-    name = StringField('Name', [validators.Length(min=2, max=50)])
-    username = StringField('Username', [validators.Length(min=4, max=20)])
-    email = StringField('Email', [validators.Length(min=6, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords do not match')
-    ])
-    confirm_password = PasswordField('Confirm Password')
 
 
 if __name__ == "__main__":
