@@ -7,7 +7,7 @@
     {% for article in articles %}
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">{{article.title}}</h4>       
+            <a href="{{ url_for('one_article', article_id=article._id) }}" class="card-title">{{article.title}}</a>       
             
         </div>
     </div> 

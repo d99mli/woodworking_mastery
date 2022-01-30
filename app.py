@@ -73,6 +73,15 @@ def articles():
     return render_template('articles.html', articles=all_articles)
 
 
+# --- One article ---
+@app.route("/article/<article_id>")
+def one_article(article_id):
+    article_id = mongo.db.articles.find_one(
+        {'_id': ObjectId(article_id)}
+    )
+    return render_template('one_article.html', article_id=article_id)
+
+
 # --- Add Article ---
 @app.route('/add_article', methods=['GET', 'POST'])
 def add_article():
