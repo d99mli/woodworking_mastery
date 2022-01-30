@@ -1,6 +1,6 @@
 import os
 from flask import (
-    Flask, flash, render_template, redirect, request, 
+    Flask, flash, render_template, redirect, request,
     session, url_for, logging)
 from wtforms import (
     Form, StringField, TextAreaField, PasswordField, validators)
@@ -90,15 +90,24 @@ def signin():
 
             else:
                 # Invalid Email/password match
-                flash('Incorrect Email and/or Password')
+                flash('Incorrect Email and/or Password', 'danger')
                 return redirect(url_for('signin'))
 
         else:
             # User doesn't exist
-            flash('Incorrect Email and/or Password')
-            return redirect(url_for('login'))
-  
+            flash('Incorrect Email and/or Password', 'danger')
+            return redirect(url_for('signin'))
+
     return render_template('signin.html', form=form)
+
+
+# --- Sign Out ---
+@app.route('/signout')
+def signout():
+    session.clear()
+    flash('You have successfully Signed out!', 'success')
+    return redirect(url_for('signin'))
+
 
 
 if __name__ == "__main__":
