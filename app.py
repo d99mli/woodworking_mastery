@@ -60,7 +60,8 @@ def signup():
         # insert_one requires an dictionary to store info in mongoDB
         mongo.db.users.insert_one(signup_user)
 
-        flash('You have Signed Up successfully! Please proceed to Login')
+        flash('You have Signed Up successfully! Please proceed to Login', 'success')
+        redirect(url_for('articles'))
 
     return render_template('signup.html', form=form)
 
