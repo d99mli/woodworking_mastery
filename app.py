@@ -69,7 +69,8 @@ def home():
 # --- Articles ---
 @app.route("/articles")
 def articles():
-    return render_template('articles.html')
+    all_articles = mongo.db.articles.find()
+    return render_template('articles.html', articles=all_articles)
 
 
 # --- Add Article ---
@@ -80,7 +81,9 @@ def add_article():
         one_article = {
             'title': request.form.get('title'),
             'body': request.form.get('body'),
-            'category': request.form.get('category')
+            'category': request.form.get('category'),
+            'author': session["user_signed_in"],
+            "create_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         # insert_one requires an dictionary to store info in mongoDB
         mongo.db.articles.insert_one(one_article)

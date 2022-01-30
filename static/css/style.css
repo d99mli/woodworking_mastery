@@ -10,6 +10,15 @@ main {
     text-shadow: 1px 1px 1px rgba(0,0,0, 0.5);
 }
 
+.article-wrapper {
+    background-color: #ffffff;
+    height: 1200px; 
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
 .card {
     background-color: #ffffff;
     padding: 10px 20px;
@@ -22,6 +31,11 @@ main {
 .form-group {
     margin-bottom: 0.5rem;
     font-weight: 600;
+}
+
+/* Card Editor */
+.article-body {
+    height: 300px;
 }
 
 /* Sidebar section */

@@ -101,9 +101,9 @@ I have not got it working as planned... I have most flask/python functionality w
 I have deployed it to Heroku earlier in development and got it working. However, as of 11.30 I find out I have an error when viewing site through Heroku...
 
 ### Updated january 2022, manual trouble shooting
-1. During the last weeks of coding I noticed another issue. When I make a new requirements.txt it has started to include all installed packages, not sure why... Update, found the issue about the bloated requirements.txt on Slack and have tried the fix recommended. Not sure if it worked or not...
-2. Function decorator not workin properly when signed in - Bug was a typo in the session name for @wraps decorator.
-3. 
+1.   During the last weeks of coding I noticed another issue. When I make a new requirements.txt it has started to include all installed packages, not sure why... Update, found the issue about the bloated requirements.txt on Slack and have tried the fix recommended. Not sure if it worked or not...
+2.  Function decorator not workin properly when signed in - Bug was a typo in the session name for @wraps decorator.
+3.  Retested the add_article function, works, adding to db. Needs to be completed with author (session user) and date_posted.
 
 
 ### Manual&nbsp;Testing

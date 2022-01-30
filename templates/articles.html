@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Articles</h2> 
+<div class="article-wrapper">
+    <h2>Articles</h2>
+    <hr>
+    {% for article in articles %}
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">{{article.title}}</h4>       
+            
+        </div>
+    </div> 
+    {% endfor %}
+</div>
+ 
 
 {% endblock %}
