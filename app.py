@@ -1,6 +1,7 @@
 import os
 from flask import (
-    Flask, flash, render_template, redirect, request, session, url_for, logging)
+    Flask, flash, render_template, redirect, request, 
+    session, url_for, logging)
 from wtforms import (
     Form, StringField, TextAreaField, PasswordField, validators)
 from passlib.hash import sha256_crypt
@@ -28,7 +29,7 @@ class SignupForm(Form):
     email = StringField('Email', [validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords do not match')
+        validators.EqualTo('confirm_password', message='Passwords don´t match')
     ])
     confirm_password = PasswordField('Confirm Password')
 
@@ -47,6 +48,7 @@ def articles():
     return render_template('articles.html')
 
 
+# --- Sign up ---
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     form = SignupForm(request.form)
@@ -60,13 +62,46 @@ def signup():
         # insert_one requires an dictionary to store info in mongoDB
         mongo.db.users.insert_one(signup_user)
 
-        flash('You have Signed Up successfully! Please proceed to Login', 'success')
-        redirect(url_for('articles'))
+        flash('You have Signed Up successfully!', 'success')
+        return redirect(url_for('signin'))
 
     return render_template('signup.html', form=form)
 
 
+# --- Sign in ---
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    form = SignupForm(request.form)
+    if request.method == 'POST':
+        # Check if user exists in db
+        user_signin = mongo.db.users.find_one(
+            {'email': request.form.get('email').lower()}
+        )
+
+        if user_signin:
+            # Ensure hashed passwords matches user input
+            if sha256_crypt.verify(
+                    request.form.get('password'), user_signin['password']):
+
+                session['user'] = request.form.get('email').lower()
+                flash('Welcome, {}'.format(
+                    request.form.get('email')), 'success')
+                return redirect(url_for('articles'))
+
+            else:
+                # Invalid Email/password match
+                flash('Incorrect Email and/or Password')
+                return redirect(url_for('signin'))
+
+        else:
+            # User doesn't exist
+            flash('Incorrect Email and/or Password')
+            return redirect(url_for('login'))
+  
+    return render_template('signin.html', form=form)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
-    port = int(os.environ.get("PORT")),
-    debug = True)
+            port=int(os.environ.get("PORT")),
+            debug=True)

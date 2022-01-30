@@ -21,6 +21,7 @@ main {
 /* Form styling */
 .form-group {
     margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 /* Sidebar section */
