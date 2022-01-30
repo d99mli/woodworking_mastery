@@ -6,24 +6,21 @@
       </button>
       <div class="navbar-collapse collapse navbars justify-content-end" id="navbar2">
           <ul class="navbar-nav">
-              <!-- if -->
-              <li>
-                <a class="nav-link" href="#">Dashboard</a>
-              </li>
+              {% if session.user_signed_in %}
               <li>
                 <a class="nav-link" href="#">Account</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('signout') }}">Sign Out</a>
               </li>            
-            <!-- else -->
+              {% else %}
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('signin') }}">Sign In</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
               </li>
-            <!-- endif -->
+              {% endif %}
           </ul>
       </div>
     </div>

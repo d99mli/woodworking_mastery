@@ -1,4 +1,5 @@
 import os
+from functools import wraps
 from flask import (
     Flask, flash, render_template, redirect, request,
     session, url_for, logging)
@@ -34,6 +35,21 @@ class SignupForm(Form):
     confirm_password = PasswordField('Confirm Password')
 
 # ---------------- End Forms ----------------
+
+# ---------------- funcion decorator ----------------
+
+
+# Check if user logged in (function decorator)
+def is_signed_in(func):
+    @wraps(func)
+    def wrap(*args, **kwargs):
+        if 'user' in session:
+            return func(*args, **kwargs)
+        else:
+            flash('Unauthorized, please sign in!', 'danger')
+            return redirect(url_for('signin'))
+    return wrap
+# ---------------- End funciont ----------------
 
 
 # ---------------- Routes ----------------
@@ -83,7 +99,9 @@ def signin():
             if sha256_crypt.verify(
                     request.form.get('password'), user_signin['password']):
 
-                session['user'] = request.form.get('email').lower()
+                # Create session cookie for signed in user
+                session['user_signed_in'] = True
+                session['email'] = request.form.get('email').lower()
                 flash('Welcome, {}'.format(
                     request.form.get('email')), 'success')
                 return redirect(url_for('articles'))
@@ -107,7 +125,6 @@ def signout():
     session.clear()
     flash('You have successfully Signed out!', 'success')
     return redirect(url_for('signin'))
-
 
 
 if __name__ == "__main__":
