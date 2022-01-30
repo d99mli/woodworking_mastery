@@ -79,7 +79,7 @@ The forums should have a clear and easy to understand category system as well as
 CSS styling was used by utilizing Bootstrap framework. The code snippets have been implemented from [Bootstrap](getbootstrap.com).
 Javascript was used for writing the logic behind the interactivity.
 CKEditor was implemented for textarea funcionality.
-Flask Framework and libraries for authentication, validation, forms
+Flask WTFORMS for forms, authentication, validation.
 Google Icons CDN for all site icons.
 
 # Testing
@@ -97,6 +97,8 @@ All site pages should load as expected. guest users should have the ability to v
 
 ### Initial report before submitting
 I have not got it working as planned... I have most flask/python functionality written but not all. HAve spent to much time trying to figure out specific features, like the ratings. But have not got it working. I used MaterializeCSS in the beginning, as this evolved from the walktrough project. I have however switched to Bootstrap due to difficulties getting the desired effects.. I spent way too much time trying to get the navbar and sidenav (which I have scrapped) to work as I intended.
+
+During the last weeks of coding I noticed another issue. When I make a new requirements.txt it has started to include all installed packages, not sure why... 
 
 I have deployed it to Heroku earlier in development and got it working. However, as of 11.30 I find out I have an error when viewing site through Heroku...
 
