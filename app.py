@@ -1,5 +1,6 @@
 import os
 from functools import wraps
+from datetime import datetime
 from flask import (
     Flask, flash, render_template, redirect, request,
     session, url_for, logging)
@@ -102,11 +103,45 @@ def add_article():
     return render_template('add_article.html', form=form)
 
 
+# --- Edit Article ---
+@app.route("/edit_article/<article_id>", methods=['GET', 'POST'])
+@is_signed_in
+def edit_article(article_id):
+    form = ArticleForm(request.form)
+    if request.method == 'POST'and form.validate():
+
+        one_article = {
+            'title': request.form.get('title'),
+            'body': request.form.get('body'),
+            'category': request.form.get('category'),
+            'author': session["user_signed_in"],
+            "create_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        mongo.db.articles.update({"_id": ObjectId(article_id)}, one_article)
+        flash('Article Successfully Updated!', 'success')
+        return redirect(url_for('account'))
+
+    article = mongo.db.articles.find_one({"_id": ObjectId(article_id)})
+    return render_template('edit_article.html', article=article, form=form)
+
+
+# --- Delete article ---
+@app.route('/delete_article/<article_id>')
+@is_signed_in
+def delete_article(article_id):
+    mongo.db.articles.remove({"_id": ObjectId(article_id)})
+    flash('Article sucessfully removed!', 'success')
+    return redirect(url_for('account'))
+
+
+
 # --- User Account (profile) Page ---
 @app.route('/account')
 @is_signed_in
 def account():
-    return render_template('account.html')
+    all_articles = mongo.db.articles.find()
+    return render_template('account.html', articles=all_articles)
 
 
 # --- Sign up ---
