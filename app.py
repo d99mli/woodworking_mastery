@@ -75,7 +75,19 @@ def articles():
 # --- Add Article ---
 @app.route('/add_article', methods=['GET', 'POST'])
 def add_article():
-    return render_template('add_article.html')
+    form = ArticleForm(request.form)
+    if request.method == 'POST' and form.validate():
+        one_article = {
+            'title': request.form.get('title'),
+            'body': request.form.get('body'),
+            'category': request.form.get('category')
+        }
+        # insert_one requires an dictionary to store info in mongoDB
+        mongo.db.articles.insert_one(one_article)
+
+        flash('Article successfully posted!', 'success')
+        return redirect(url_for('articles'))
+    return render_template('add_article.html', form=form)
 
 
 # --- User Account (profile) Page ---
@@ -142,9 +154,10 @@ def signin():
 
 # --- Sign Out ---
 @app.route('/signout')
+@is_signed_in
 def signout():
     session.clear()
-    flash('You have successfully Signed out!', 'success')
+    flash('You have successfully signed out!', 'success')
     return redirect(url_for('signin'))
 
 
