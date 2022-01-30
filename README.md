@@ -96,14 +96,15 @@ All site pages should load as expected. guest users should have the ability to v
 ## Bugs
 
 ### Initial report before submitting
-I have not got it working as planned... I have most flask/python functionality written but not all. HAve spent to much time trying to figure out specific features, like the ratings. But have not got it working. I used MaterializeCSS in the beginning, as this evolved from the walktrough project. I have however switched to Bootstrap due to difficulties getting the desired effects.. I spent way too much time trying to get the navbar and sidenav (which I have scrapped) to work as I intended.
-
-During the last weeks of coding I noticed another issue. When I make a new requirements.txt it has started to include all installed packages, not sure why... 
+I have not got it working as planned... I have most flask/python functionality written but not all. Have spent to much time trying to figure out specific features, like the ratings. But have not got it working. I used MaterializeCSS in the beginning, as this evolved from the walktrough project. I have however switched to Bootstrap due to difficulties getting the desired effects.. I spent way too much time trying to get the navbar and sidenav (which I have scrapped) to work as I intended.
 
 I have deployed it to Heroku earlier in development and got it working. However, as of 11.30 I find out I have an error when viewing site through Heroku...
 
-### Updated december 2021, manual testing and trouble shooting
-To be continued...
+### Updated january 2022, manual trouble shooting
+1. During the last weeks of coding I noticed another issue. When I make a new requirements.txt it has started to include all installed packages, not sure why... Update, found the issue about the bloated requirements.txt on Slack and have tried the fix recommended. Not sure if it worked or not...
+2. Function decorator not workin properly when signed in - Bug was a typo in the session name for @wraps decorator.
+3. 
+
 
 ### Manual&nbsp;Testing
 To be continued...

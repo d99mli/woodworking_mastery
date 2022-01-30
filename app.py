@@ -22,46 +22,67 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 
-# ---------------- Forms ----------------
-
+# -------------------------------- Forms --------------------------------
+# Register / Signin
 class SignupForm(Form):
     name = StringField('Name', [validators.Length(min=2, max=50)])
     username = StringField('Username', [validators.Length(min=4, max=20)])
     email = StringField('Email', [validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm_password', message='Passwords don´t match')
+        validators.EqualTo(
+            'confirm_password', message='Passwords do not match')
     ])
     confirm_password = PasswordField('Confirm Password')
 
-# ---------------- End Forms ----------------
 
-# ---------------- funcion decorator ----------------
+# Article add/edit/update
+class ArticleForm(Form):
+    title = StringField('Title', [validators.Length(min=2, max=200)])
+    body = TextAreaField('Body', [validators.Length(min=20)])
+
+# -------------------------------- End Forms ------------------------------
+
+# -------------------------------- function decorator ---------------------
 
 
 # Check if user logged in (function decorator)
 def is_signed_in(func):
     @wraps(func)
     def wrap(*args, **kwargs):
-        if 'user' in session:
+        if 'user_signed_in' in session:
             return func(*args, **kwargs)
         else:
             flash('Unauthorized, please sign in!', 'danger')
             return redirect(url_for('signin'))
     return wrap
-# ---------------- End funciont ----------------
+# -------------------------------- End function --------------------------
 
 
-# ---------------- Routes ----------------
+# -------------------------------- Routes --------------------------------
 @app.route("/")
 @app.route("/home")
 def home():
     return render_template('home.html')
 
 
+# --- Articles ---
 @app.route("/articles")
 def articles():
     return render_template('articles.html')
+
+
+# --- Add Article ---
+@app.route('/add_article', methods=['GET', 'POST'])
+def add_article():
+    return render_template('add_article.html')
+
+
+# --- User Account (profile) Page ---
+@app.route('/account')
+@is_signed_in
+def account():
+    return render_template('account.html')
 
 
 # --- Sign up ---
