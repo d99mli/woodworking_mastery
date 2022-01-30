@@ -5,7 +5,8 @@ from flask import (
     Flask, flash, render_template, redirect, request,
     session, url_for, logging)
 from wtforms import (
-    Form, StringField, TextAreaField, PasswordField, validators)
+    Form, StringField, TextAreaField, PasswordField, BooleanField)
+from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from passlib.hash import sha256_crypt
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -24,23 +25,51 @@ mongo = PyMongo(app)
 
 
 # -------------------------------- Forms --------------------------------
-# Register / Signin
+# Register / Sign Up
 class SignupForm(Form):
-    name = StringField('Name', [validators.Length(min=2, max=50)])
-    username = StringField('Username', [validators.Length(min=4, max=20)])
-    email = StringField('Email', [validators.Length(min=6, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo(
+    name = StringField('Name', validators=[
+        DataRequired(),
+        Length(min=2, max=50),
+    ])
+    username = StringField('Username', validators=[
+        DataRequired(),
+        Length(min=4, max=20),
+    ])
+    email = StringField('Email', validators=[
+        DataRequired(),
+        Regexp(
+            '^[a-zA-Z0-9.!#$%&*+/=?_~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$',
+            message="Must be a valid e-mail")
+    ])
+    password = PasswordField('Password', validators=[
+        DataRequired(),
+        EqualTo(
             'confirm_password', message='Passwords do not match')
     ])
     confirm_password = PasswordField('Confirm Password')
 
 
+# Sign In
+class SigninForm(Form):
+    email = StringField('Email', validators=[
+        DataRequired(),
+    ])
+    password = PasswordField('Password', validators=[
+        DataRequired(),
+    ])
+    remember = BooleanField('Remember Me')
+
+
 # Article add/edit/update
 class ArticleForm(Form):
-    title = StringField('Title', [validators.Length(min=2, max=200)])
-    body = TextAreaField('Body', [validators.Length(min=20)])
+    title = StringField('Title', validators=[
+        DataRequired(),
+        Length(min=2, max=50),
+    ])
+    body = TextAreaField('Body', validators=[
+        DataRequired(),
+        Length(min=20)
+    ])
 
 # -------------------------------- End Forms ------------------------------
 
@@ -71,7 +100,7 @@ def home():
 @app.route("/articles")
 def articles():
     all_articles = mongo.db.articles.find()
-    return render_template('articles.html', articles=all_articles)
+    return render_template('articles.html', articles=all_articles, title='Articles')
 
 
 # --- One article ---
@@ -144,7 +173,7 @@ def delete_article(article_id):
 @is_signed_in
 def account():
     all_articles = mongo.db.articles.find()
-    return render_template('account.html', articles=all_articles)
+    return render_template('account.html', articles=all_articles, title='Account page')
 
 
 # --- Sign up ---
@@ -170,7 +199,7 @@ def signup():
 # --- Sign in ---
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
-    form = SignupForm(request.form)
+    form = SigninForm(request.form)
     if request.method == 'POST':
         # Check if user exists in db
         user_signin = mongo.db.users.find_one(
