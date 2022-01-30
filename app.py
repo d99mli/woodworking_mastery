@@ -123,6 +123,9 @@ def edit_article(article_id):
         return redirect(url_for('account'))
 
     article = mongo.db.articles.find_one({"_id": ObjectId(article_id)})
+    form.title.data = article['title']
+    form.body.data = article['body']
+
     return render_template('edit_article.html', article=article, form=form)
 
 
