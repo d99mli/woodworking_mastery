@@ -71,24 +71,21 @@ The forums should have a clear and easy to understand category system as well as
 
 ## Upcoming&nbsp;Features
 
-- A webshop with tools and accessories (MS4, Django Fullstack)
 - Ratings function that sorts search queries.
 
 # Technologies&nbsp;Used
 
 CSS styling was used by utilizing Bootstrap framework. The code snippets have been implemented from [Bootstrap](getbootstrap.com).
-Javascript was used for writing the logic behind the interactivity.
+Javascript was used for writing the logic behind the interactivity. (only for CKEditor)
 CKEditor was implemented for textarea funcionality.
 Flask WTFORMS for forms, authentication, validation.
-Google Icons CDN for all site icons.
+Google Icons CDN for all site icons. (no icons used)
 
 # Testing
 NOT YET TESTED...
 JS Hint
 HTML Validator
-![HTML Validator result](/assets/img/HTML_validator.JPG "HTML validator results")
 CSS Validator
-![CSS Validator result](/assets/img/CSS_validator.JPG "CSS validator results")
 
 ## Expected&nbsp;Outcome
 All site pages should load as expected. guest users should have the ability to view the site. Only registered and logged in users should be allowed to post content. Admin account to moderate content and suspend users. An 404 custom page for missing or invalid page requests.
@@ -106,28 +103,28 @@ I have deployed it to Heroku earlier in development and got it working. However,
 3.  Retested the add_article function, works, adding to db. Needs to be completed with author (session user) and date_posted. completed.
 4.  Have tested full CRUD functionality. Had trouble populating form fields for edit. Solved - Edit article populates form on entry.
 5.  Continued testing on form validation. made some changes to validators.
-6. Add article does not work. All of a sudden.. Edit articles works..  Seems to be related to extension CKeditor for TextAreaField formatting..
+6. Add article does not work. All of a sudden.. Edit articles works..  Seems to be related to extension CKeditor for TextAreaField formatting.. Have tried another to solve this issue, after a few hours sleep. still no effect..
 
 
 
 
 # Deployment
+Debugger is turned off.
+
 It is published using Github: https://github.com/d99mli/woodworking_mastery
 Deployed using Heroku: https://woodworking-mastery-d99mli.herokuapp.com/
 
+
 # Credits
 I have used Stackoverflow extensively during the Javascript parts of the course.
+Flask docs and WTForms docs have been used extensibly.
 The Code Institute walkthrough with Tim Nelson was the foundation to this course
 Corey Schafer and his Tutorial series on Flask was a great help https://www.youtube.com/c/Coreyms/videos
 
-## Wireframes
-To be continued...
-Wireframes produced on paper. To be scanned and published on github.
 
 ## Media
 -To be continued..
-All Video uploads are from youtube and links to original publisher.
-Pictures are from Unsplash.com and accredited to 
+No media added...
 
 
 ## Acknowledgements
