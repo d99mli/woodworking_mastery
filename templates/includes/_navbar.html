@@ -8,7 +8,7 @@
           <ul class="navbar-nav">
               {% if session.user_signed_in %}
               <li>
-                <a class="nav-link" href="{{ url_for('account') }}">Account</a>
+                <a class="nav-link" href="{{ url_for('account') }}">{{ session.user_signed_in }}</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('signout') }}">Sign Out</a>
@@ -36,11 +36,13 @@
               <li class="nav-item active">
                   <a class="nav-link" href="{{ url_for( 'articles' ) }}">Articles</a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="#">Link 2</a>
+              {% if session.user_signed_in %}
+              <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for( 'add_article' ) }}">New Article</a>
               </li>
+              {% endif %}
               <li class="nav-item">
-                  <a class="nav-link" href="#">Link 2</a>
+                  <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
               </li>
           </ul>
       </div>

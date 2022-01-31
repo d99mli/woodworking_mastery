@@ -3,9 +3,9 @@ from functools import wraps
 from datetime import datetime
 from flask import (
     Flask, flash, render_template, redirect, request,
-    session, url_for, logging)
+    session, url_for)
 from wtforms import (
-    Form, StringField, TextAreaField, PasswordField, BooleanField)
+    Form, StringField, TextAreaField, PasswordField)
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo
 from passlib.hash import sha256_crypt
 from flask_pymongo import PyMongo
@@ -57,7 +57,6 @@ class SigninForm(Form):
     password = PasswordField('Password', validators=[
         DataRequired(),
     ])
-    remember = BooleanField('Remember Me')
 
 
 # Article add/edit/update
@@ -66,9 +65,8 @@ class ArticleForm(Form):
         DataRequired(),
         Length(min=2, max=50),
     ])
-    body = TextAreaField('Body', validators=[
+    content = TextAreaField('Content', validators=[
         DataRequired(),
-        Length(min=20)
     ])
 
 # -------------------------------- End Forms ------------------------------
@@ -96,11 +94,16 @@ def home():
     return render_template('home.html')
 
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
+
 # --- Articles ---
 @app.route("/articles")
 def articles():
     all_articles = mongo.db.articles.find()
-    return render_template('articles.html', articles=all_articles, title='Articles')
+    return render_template('articles.html', articles=all_articles)
 
 
 # --- One article ---
@@ -114,21 +117,24 @@ def one_article(article_id):
 
 # --- Add Article ---
 @app.route('/add_article', methods=['GET', 'POST'])
+@is_signed_in
 def add_article():
     form = ArticleForm(request.form)
     if request.method == 'POST' and form.validate():
-        one_article = {
+
+        new_article = {
             'title': request.form.get('title'),
-            'body': request.form.get('body'),
-            'category': request.form.get('category'),
+            'content': request.form.get('content'),
             'author': session["user_signed_in"],
             "create_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
+
         # insert_one requires an dictionary to store info in mongoDB
-        mongo.db.articles.insert_one(one_article)
+        mongo.db.articles.insert_one(new_article)
 
         flash('Article successfully posted!', 'success')
         return redirect(url_for('articles'))
+
     return render_template('add_article.html', form=form)
 
 
@@ -137,14 +143,13 @@ def add_article():
 @is_signed_in
 def edit_article(article_id):
     form = ArticleForm(request.form)
-    if request.method == 'POST'and form.validate():
+    if request.method == 'POST' and form.validate():
 
         one_article = {
             'title': request.form.get('title'),
-            'body': request.form.get('body'),
-            'category': request.form.get('category'),
+            'content': request.form.get('content'),
             'author': session["user_signed_in"],
-            "create_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            "create_date": datetime.now().strftime('%Y-%m-%d %H:%M')
         }
 
         mongo.db.articles.update({"_id": ObjectId(article_id)}, one_article)
@@ -153,7 +158,7 @@ def edit_article(article_id):
 
     article = mongo.db.articles.find_one({"_id": ObjectId(article_id)})
     form.title.data = article['title']
-    form.body.data = article['body']
+    form.content.data = article['content']
 
     return render_template('edit_article.html', article=article, form=form)
 
@@ -167,13 +172,12 @@ def delete_article(article_id):
     return redirect(url_for('account'))
 
 
-
 # --- User Account (profile) Page ---
 @app.route('/account')
 @is_signed_in
 def account():
     all_articles = mongo.db.articles.find()
-    return render_template('account.html', articles=all_articles, title='Account page')
+    return render_template('account.html', articles=all_articles)
 
 
 # --- Sign up ---
@@ -181,6 +185,14 @@ def account():
 def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
+        # check if user already exists in db
+        existing_user = mongo.db.users.find_one(
+            {"email": request.form.get("email").lower()})
+
+        if existing_user:
+            flash('Email already listed. Please proceed to Sign In', 'warning')
+            return redirect(url_for('signin'))
+
         signup_user = {
             'name': request.form.get('name').lower(),
             'email': request.form.get('email').lower(),
@@ -212,10 +224,9 @@ def signin():
                     request.form.get('password'), user_signin['password']):
 
                 # Create session cookie for signed in user
-                session['user_signed_in'] = True
-                session['email'] = request.form.get('email').lower()
-                flash('Welcome, {}'.format(
-                    request.form.get('email')), 'success')
+                session['user_signed_in'] = request.form.get("email")
+                flash("Welcome, {}".format(
+                    request.form.get("email")), 'success')
                 return redirect(url_for('articles'))
 
             else:

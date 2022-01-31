@@ -103,20 +103,19 @@ I have deployed it to Heroku earlier in development and got it working. However,
 ### Updated january 2022, manual trouble shooting
 1.   During the last weeks of coding I noticed another issue. When I make a new requirements.txt it has started to include all installed packages, not sure why... Update, found the issue about the bloated requirements.txt on Slack and have tried the fix recommended. Not sure if it worked or not...
 2.  Function decorator not workin properly when signed in - Bug was a typo in the session name for @wraps decorator.
-3.  Retested the add_article function, works, adding to db. Needs to be completed with author (session user) and date_posted.
+3.  Retested the add_article function, works, adding to db. Needs to be completed with author (session user) and date_posted. completed.
 4.  Have tested full CRUD functionality. Had trouble populating form fields for edit. Solved - Edit article populates form on entry.
 5.  Continued testing on form validation. made some changes to validators.
+6. Add article does not work. All of a sudden.. Edit articles works..  Seems to be related to extension CKeditor for TextAreaField formatting..
 
 
-### Manual&nbsp;Testing
-To be continued...
+
 
 # Deployment
 It is published using Github: https://github.com/d99mli/woodworking_mastery
 Deployed using Heroku: https://woodworking-mastery-d99mli.herokuapp.com/
 
 # Credits
-To be continued...
 I have used Stackoverflow extensively during the Javascript parts of the course.
 The Code Institute walkthrough with Tim Nelson was the foundation to this course
 Corey Schafer and his Tutorial series on Flask was a great help https://www.youtube.com/c/Coreyms/videos
