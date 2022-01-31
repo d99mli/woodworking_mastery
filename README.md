@@ -103,7 +103,7 @@ I have deployed it to Heroku earlier in development and got it working. However,
 3.  Retested the add_article function, works, adding to db. Needs to be completed with author (session user) and date_posted. completed.
 4.  Have tested full CRUD functionality. Had trouble populating form fields for edit. Solved - Edit article populates form on entry.
 5.  Continued testing on form validation. made some changes to validators.
-6. Add article does not work. All of a sudden.. Edit articles works..  Seems to be related to extension CKeditor for TextAreaField formatting.. Have tried another to solve this issue, after a few hours sleep. still no effect..
+6. Add article does not work. All of a sudden.. Edit articles works..  Seems to be related to extension CKeditor for TextAreaField formatting.. Have tried another to solve this issue, after a few hours sleep. still no effect.. Finally decided to remove CKEditor functionality on add_article form. Now it works..
 
 
 
